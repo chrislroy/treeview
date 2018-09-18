@@ -223,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="default.txt" />
+    <None Include="resources\stylesheet.qss" />
     <QtRcc Include="simpletreemodel.qrc">
     </QtRcc>
   </ItemGroup>
