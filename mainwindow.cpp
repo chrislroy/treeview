@@ -73,12 +73,13 @@ void MainWindow::removeItemRow(const QModelIndex& index)
 
 void MainWindow::rowClicked(const QModelIndex &index)
 {
-    qDebug() << index;
+    // demonstrate data from cell
+    qDebug() << qPrintable(index.data().toString());
 
     if (index.column() != 2) // consider only thrid columns for now
         return;
+
     auto type = index.data(Qt::UserRole + 1).toInt();
-    qDebug() << "Type: " << type;
 
     if (type == RowType::GroupRow) {
         // add a sub row
@@ -87,10 +88,7 @@ void MainWindow::rowClicked(const QModelIndex &index)
     else if (type == RowType::ItemRow) {
         // delete the current row
         removeItemRow(index);
-        //auto parentIndex = _standardModel->parent(index);
-        //_standardModel->removeRow(index.row(), parentIndex);
     }
-
 }
 
 MyTreeview::MyTreeview(QWidget* parent)
