@@ -29,11 +29,6 @@ QList<QStandardItem *> prepareRow(
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    treeView = new MyTreeview(this);
-    treeView->setObjectName("brapbrapbrap");
-
-    connect(treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(rowClicked(const QModelIndex &)));
-    setCentralWidget(treeView);
     standardModel = new QStandardItemModel;
 
     QStandardItem *item = standardModel->invisibleRootItem();
@@ -43,7 +38,15 @@ MainWindow::MainWindow(QWidget *parent)
     item->appendRow(prepareRow(RowType::GroupRow, "Life is beautiful", "", "resources/plus.png"));
     item->appendRow(prepareRow(RowType::GroupRow, "Group D", "", "resources/plus.png"));
 
+    treeView = new MyTreeview(this);
+    treeView->setObjectName("brapbrapbrap");
+
+    connect(treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(rowClicked(const QModelIndex &)));
+    setCentralWidget(treeView);
+
     treeView->setModel(standardModel);
+
+    treeView->updateColumns();
     treeView->expandAll();
 }
 
@@ -75,7 +78,18 @@ MyTreeview::MyTreeview(QWidget* parent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setMinimumWidth(300);
+
+
 }
 
+void MyTreeview::updateColumns()
+{
+    // header()->setCascadingSectionResizes(false);
+    header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(2, QHeaderView::Fixed);
+    header()->setStretchLastSection(false);
+    header()->resizeSection(2, 50);
+}
 
 

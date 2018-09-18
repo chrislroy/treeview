@@ -21,8 +21,7 @@ class MyTreeview : public QTreeView {
 public:
     
     MyTreeview(QWidget* = nullptr);
-    //void mouseReleaseEvent(QMouseEvent *);
-
+    void updateColumns();
 };
 
 class MainWindow : public QMainWindow
