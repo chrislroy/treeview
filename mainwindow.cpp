@@ -20,7 +20,7 @@ QList<QStandardItem *> prepareRow(
     rowItems << new QStandardItem(second);
     cell = new QStandardItem(QIcon(third), "");
     cell->setEditable(false); // make text not editable
-    cell->setData(rowType);
+    cell->setData(rowType, Qt::UserRole + 1);
     rowItems << cell;
 
     return rowItems;
@@ -56,7 +56,7 @@ void MainWindow::rowClicked(const QModelIndex &index)
 
     if (index.column() != 2) // consider only thrid columns for now
         return;
-    auto type = index.data(257).toInt();
+    auto type = index.data(Qt::UserRole + 1).toInt();
     qDebug() << "Type: " << type;
 
     if (type == RowType::GroupRow) {
@@ -64,6 +64,8 @@ void MainWindow::rowClicked(const QModelIndex &index)
         qDebug() << "adding row!!!";
 
         _standardModel->insertRow(index.row() + 1, prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
+        //auto item = _standardModel->itemFromIndex(index);
+        //item->appendRow(prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
     }
     else if (type == RowType::ItemRow) {
 
