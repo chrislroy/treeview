@@ -33,6 +33,20 @@ private:
     MyTreeview *_treeView;
     QStandardItemModel *_standardModel;
 
+private:
+
+    QList<QStandardItem *> createGroupRow(
+        const QString &first,
+        const QString &second,
+        const QString &third);
+
+    void addItemRow(
+        const QString &first,
+        const QString &second,
+        const QString &third,
+        const QModelIndex &parent);
+    void removeItemRow(const QModelIndex& index);
+
 public slots:
     void rowClicked(const QModelIndex &index);
 

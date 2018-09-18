@@ -7,25 +7,6 @@
 #include <QHeaderView>
 #include "mainwindow.h"
 
-QList<QStandardItem *> prepareRow(
-    RowType rowType,
-    const QString &first,
-    const QString &second,
-    const QString &third)
-{
-    QList<QStandardItem *> rowItems;
-    auto cell = new QStandardItem(first);
-    cell->setEditable(false);
-    rowItems << cell;
-    rowItems << new QStandardItem(second);
-    cell = new QStandardItem(QIcon(third), "");
-    cell->setEditable(false); // make text not editable
-    cell->setData(rowType, Qt::UserRole + 1);
-    rowItems << cell;
-
-    return rowItems;
-}
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -33,10 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     QStandardItem *item = _standardModel->invisibleRootItem();
     // adding a row to the invisible root item produces a root element
-    item->appendRow(prepareRow(RowType::GroupRow, "Quare", "", "resources/plus.png"));
-    item->appendRow(prepareRow(RowType::GroupRow, "A very long day", "", "resources/plus.png"));
-    item->appendRow(prepareRow(RowType::GroupRow, "Life is beautiful", "", "resources/plus.png"));
-    item->appendRow(prepareRow(RowType::GroupRow, "Group D", "", "resources/plus.png"));
+    item->appendRow(createGroupRow("Quare", "", "resources/plus.png"));
+    item->appendRow(createGroupRow("A very long day", "", "resources/plus.png"));
+    item->appendRow(createGroupRow("Life is beautiful", "", "resources/plus.png"));
+    item->appendRow(createGroupRow("Group D", "", "resources/plus.png"));
 
     _treeView = new MyTreeview(this);
     _treeView->setObjectName("brapbrapbrap");
@@ -50,6 +31,46 @@ MainWindow::MainWindow(QWidget *parent)
     _treeView->expandAll();
 }
 
+QList<QStandardItem *> MainWindow::createGroupRow(
+    const QString &first,
+    const QString &second,
+    const QString &third)
+{
+    QList<QStandardItem *> rowItems;
+    auto cell = new QStandardItem(first);
+    cell->setEditable(false);
+    rowItems << cell;
+    rowItems << new QStandardItem(second);
+    cell = new QStandardItem(QIcon(third), "");
+    cell->setEditable(false); // make text not editable
+    cell->setData(RowType::GroupRow, Qt::UserRole + 1);
+    rowItems << cell;
+
+    return rowItems;
+}
+
+void MainWindow::addItemRow(
+    const QString &first,
+    const QString &second,
+    const QString &third,
+    const QModelIndex &groupIndex)
+{
+    auto item = _standardModel->item(groupIndex.row());
+    auto itemRow = item->rowCount();
+    item->setChild(itemRow, 0, new QStandardItem(first));
+    item->setChild(itemRow, 1, new QStandardItem(second));
+    auto cell = new QStandardItem(QIcon(third), "");
+    cell->setEditable(false); // make text not editable
+    cell->setData(RowType::ItemRow, Qt::UserRole + 1);
+    item->setChild(itemRow, 2, cell);
+}
+
+void MainWindow::removeItemRow(const QModelIndex& index)
+{
+    auto parentIndex = _standardModel->parent(index);
+    _standardModel->removeRow(index.row(), parentIndex);
+}
+
 void MainWindow::rowClicked(const QModelIndex &index)
 {
     qDebug() << index;
@@ -61,16 +82,13 @@ void MainWindow::rowClicked(const QModelIndex &index)
 
     if (type == RowType::GroupRow) {
         // add a sub row
-        qDebug() << "adding row!!!";
-
-        _standardModel->insertRow(index.row() + 1, prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
-        //auto item = _standardModel->itemFromIndex(index);
-        //item->appendRow(prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
+        addItemRow("111", "222", "resources/delete.png", index);
     }
     else if (type == RowType::ItemRow) {
-
         // delete the current row
-        _standardModel->removeRow(index.row());
+        removeItemRow(index);
+        //auto parentIndex = _standardModel->parent(index);
+        //_standardModel->removeRow(index.row(), parentIndex);
     }
 
 }
