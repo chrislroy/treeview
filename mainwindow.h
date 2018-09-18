@@ -30,15 +30,13 @@ class MainWindow : public QMainWindow
 
 private:
 
-    MyTreeview *treeView;
-    QStandardItemModel *standardModel;
+    MyTreeview *_treeView;
+    QStandardItemModel *_standardModel;
 
 public slots:
     void rowClicked(const QModelIndex &index);
 
 public:
-
-
 
     MainWindow(QWidget *parent = 0);
 };

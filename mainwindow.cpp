@@ -29,25 +29,25 @@ QList<QStandardItem *> prepareRow(
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    standardModel = new QStandardItemModel;
+    _standardModel = new QStandardItemModel;
 
-    QStandardItem *item = standardModel->invisibleRootItem();
+    QStandardItem *item = _standardModel->invisibleRootItem();
     // adding a row to the invisible root item produces a root element
     item->appendRow(prepareRow(RowType::GroupRow, "Quare", "", "resources/plus.png"));
     item->appendRow(prepareRow(RowType::GroupRow, "A very long day", "", "resources/plus.png"));
     item->appendRow(prepareRow(RowType::GroupRow, "Life is beautiful", "", "resources/plus.png"));
     item->appendRow(prepareRow(RowType::GroupRow, "Group D", "", "resources/plus.png"));
 
-    treeView = new MyTreeview(this);
-    treeView->setObjectName("brapbrapbrap");
+    _treeView = new MyTreeview(this);
+    _treeView->setObjectName("brapbrapbrap");
 
-    connect(treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(rowClicked(const QModelIndex &)));
-    setCentralWidget(treeView);
+    connect(_treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(rowClicked(const QModelIndex &)));
+    setCentralWidget(_treeView);
 
-    treeView->setModel(standardModel);
+    _treeView->setModel(_standardModel);
 
-    treeView->updateColumns();
-    treeView->expandAll();
+    _treeView->updateColumns();
+    _treeView->expandAll();
 }
 
 void MainWindow::rowClicked(const QModelIndex &index)
@@ -56,19 +56,19 @@ void MainWindow::rowClicked(const QModelIndex &index)
 
     if (index.column() != 2) // consider only thrid columns for now
         return;
-    auto type = index.data().toInt();
+    auto type = index.data(257).toInt();
     qDebug() << "Type: " << type;
 
     if (type == RowType::GroupRow) {
         // add a sub row
         qDebug() << "adding row!!!";
-        auto model = dynamic_cast<const QStandardItemModel*>(index.model());
-        QStandardItem *section = model->item(index.row());
-        section->appendRow(prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
-        
+
+        _standardModel->insertRow(index.row() + 1, prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
     }
-    else if (index.data() == RowType::ItemRow) {
+    else if (type == RowType::ItemRow) {
+
         // delete the current row
+        _standardModel->removeRow(index.row());
     }
 
 }
@@ -78,8 +78,6 @@ MyTreeview::MyTreeview(QWidget* parent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setMinimumWidth(300);
-
-
 }
 
 void MyTreeview::updateColumns()
