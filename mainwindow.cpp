@@ -73,6 +73,8 @@ void MainWindow::rowClicked(const QModelIndex &index)
 MyTreeview::MyTreeview(QWidget* parent)
     : QTreeView(parent)
 {
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setMinimumWidth(300);
 }
 
 

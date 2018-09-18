@@ -1,17 +1,5 @@
-_QTreeView#brapbrapbrap {
+QTreeView {
     alternate-background-color: lightgrey;
-}
-
-_QTreeView::branch:has-siblings:!adjoins-item {
-    border-image: url(resources/vline.png) 0;
-}
-
-_QTreeView::branch:has-siblings:adjoins-item {
-    border-image: url(resources/branch-more.png) 0;
-}
-
-_QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-    border-image: url(resources/branch-end.png) 0;
 }
 
 QTreeView::branch:has-children:!has-siblings:closed,
@@ -26,6 +14,6 @@ QTreeView::branch:open:has-children:has-siblings  {
         image: url(resources/branch-open.png);
 }
 
-QWidget {
+_QWidget {
   background-color: darkgrey;
 }
