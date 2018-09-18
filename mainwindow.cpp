@@ -14,11 +14,14 @@ QList<QStandardItem *> prepareRow(
     const QString &third)
 {
     QList<QStandardItem *> rowItems;
-    rowItems << new QStandardItem(first);
+    auto cell = new QStandardItem(first);
+    cell->setEditable(false);
+    rowItems << cell;
     rowItems << new QStandardItem(second);
-    auto item = new QStandardItem(QIcon(third), "");
-    item->setData(rowType);
-    rowItems << item;
+    cell = new QStandardItem(QIcon(third), "");
+    cell->setEditable(false); // make text not editable
+    cell->setData(rowType);
+    rowItems << cell;
 
     return rowItems;
 }
@@ -27,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     treeView = new MyTreeview(this);
+    treeView->setObjectName("brapbrapbrap");
 
     connect(treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(rowClicked(const QModelIndex &)));
     setCentralWidget(treeView);
@@ -34,10 +38,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     QStandardItem *item = standardModel->invisibleRootItem();
     // adding a row to the invisible root item produces a root element
-    item->appendRow(prepareRow(RowType::GroupRow, "Group A", "Quare", "resources/plus.png"));
-    item->appendRow(prepareRow(RowType::GroupRow, "Group B", "Triangle", "resources/plus.png"));
-    item->appendRow(prepareRow(RowType::GroupRow, "Group C", "Circle", "resources/plus.png"));
-    item->appendRow(prepareRow(RowType::GroupRow, "Group D", "Weird", "resources/plus.png"));
+    item->appendRow(prepareRow(RowType::GroupRow, "Quare", "", "resources/plus.png"));
+    item->appendRow(prepareRow(RowType::GroupRow, "A very long day", "", "resources/plus.png"));
+    item->appendRow(prepareRow(RowType::GroupRow, "Life is beautiful", "", "resources/plus.png"));
+    item->appendRow(prepareRow(RowType::GroupRow, "Group D", "", "resources/plus.png"));
 
     treeView->setModel(standardModel);
     treeView->expandAll();
@@ -71,30 +75,5 @@ MyTreeview::MyTreeview(QWidget* parent)
 {
 }
 
-
-//void MyTreeview::mouseReleaseEvent(QMouseEvent *ev)
-//{
-//    qDebug() << ev->pos();
-//    QTreeView::mouseReleaseEvent(ev);
-//    QModelIndex index = QTreeView::indexAt(ev->pos());
-//    if (index.column() != 2) // consider only thrid columns for now
-//        return;
-//    auto type = index.data().toInt();
-//    if (isExpanded(index))
-//        qDebug() << "Index expanded";
-//
-//    if (type == RowType::GroupRow) {
-//        // add a sub row
-//        qDebug() << "adding row!!!";
-//        auto model = dynamic_cast<const QStandardItemModel*>(index.model());
-//        QStandardItem *section = model->item(index.row());
-//        section->appendRow(prepareRow(RowType::ItemRow, "111", "222", "resources/delete.png"));
-//
-//    }
-//    else if (index.data() == RowType::ItemRow) {
-//        // delete the current row
-//    }
-//
-//}
 
 
