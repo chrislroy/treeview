@@ -81,4 +81,7 @@
       <Filter>Generated Files</Filter>
     </Object>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="bitmap1.bmp" />
+  </ItemGroup>
 </Project>

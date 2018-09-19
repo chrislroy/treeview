@@ -36,6 +36,7 @@ QList<QStandardItem *> MainWindow::createGroupRow(
     const QString &second,
     const QString &third)
 {
+    QColor backgroundColor("#3B4453");
     QList<QStandardItem *> rowItems;
     auto cell = new QStandardItem(first);
     cell->setEditable(false);
@@ -46,6 +47,9 @@ QList<QStandardItem *> MainWindow::createGroupRow(
     cell->setData(RowType::GroupRow, Qt::UserRole + 1);
     rowItems << cell;
 
+    for(int i = 0; i < rowItems.count();++i)
+        rowItems[i]->setBackground(backgroundColor);
+
     return rowItems;
 }
 
@@ -55,6 +59,8 @@ void MainWindow::addItemRow(
     const QString &third,
     const QModelIndex &groupIndex)
 {
+    QColor backgroundColor("#464E61");
+
     auto item = _standardModel->item(groupIndex.row());
     auto itemRow = item->rowCount();
     item->setChild(itemRow, 0, new QStandardItem(first));
@@ -63,6 +69,10 @@ void MainWindow::addItemRow(
     cell->setEditable(false); // make text not editable
     cell->setData(RowType::ItemRow, Qt::UserRole + 1);
     item->setChild(itemRow, 2, cell);
+
+    for (int i = 0; i < item->columnCount(); ++i)
+        item->child(itemRow, i)->setBackground(backgroundColor);
+
 }
 
 void MainWindow::removeItemRow(const QModelIndex& index)

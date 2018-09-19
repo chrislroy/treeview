@@ -14,7 +14,7 @@
     <ProjectGuid>{4F3149A7-1D26-3DA0-929F-EA3B96E9C0FA}</ProjectGuid>
     <RootNamespace>simpletreemodel</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -217,7 +217,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.txt" />
+    <None Include="default.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </None>
     <None Include="resources\stylesheet.qss" />
     <QtRcc Include="simpletreemodel.qrc">
     </QtRcc>
@@ -227,6 +229,9 @@
   </ItemGroup>
   <ItemGroup>
     <Object Include="x64\Debug\moc_mainwindow.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="bitmap1.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
