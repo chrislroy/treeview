@@ -5,7 +5,31 @@
 #include <QStandardItem>
 #include <QMouseEvent>
 #include <QHeaderView>
+#include <QItemDelegate>
+#include <QPainter>
 #include "mainwindow.h"
+
+
+class MyDelegate : public QItemDelegate {
+public:
+    MyDelegate(QObject* parent = nullptr)
+        : QItemDelegate(parent)
+    {
+
+    }
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+        QColor groupColor("#3B4453");
+        QColor itemColor("#464E61");
+
+        QItemDelegate::paint(painter, option, index);
+
+        auto type = index.data(Qt::UserRole + 1).toInt();
+        if (!(option.state & QStyle::State_MouseOver) && type == ItemRow) {
+            painter->fillRect(option.rect, itemColor);
+        }
+    }
+};
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,7 +44,8 @@ MainWindow::MainWindow(QWidget *parent)
     item->appendRow(createGroupRow("Group D", "", "resources/plus.png"));
 
     _treeView = new MyTreeview(this);
-    _treeView->setObjectName("brapbrapbrap");
+
+    _treeView->setItemDelegateForColumn(2, new MyDelegate());
 
     connect(_treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(rowClicked(const QModelIndex &)));
     setCentralWidget(_treeView);

@@ -1,7 +1,6 @@
 QTreeView {
 	color: white;
 	background-color: #3B4453;
-	alternate-background-color: yellow;
 }
 
 QTreeView::branch:has-children:!has-siblings:closed,
@@ -16,8 +15,29 @@ QTreeView::branch:open:has-children:has-siblings  {
 		image: url(resources/branch-open.png);
 }
 
-_QWidget {
-  background-color: darkgrey;
+QTreeView {
+    _show-decoration-selected: 1;
 }
 
+QTreeView::_item {
+    border: 1px solid #d9d9d9;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+}
 
+QTreeView::item:hover {
+    _background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
+    _border: 1px solid #bfcde4;
+}
+
+QTreeView::item:selected {
+    _border: 1px solid #567dbc;
+}
+
+QTreeView::item:selected:active{
+    _background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+}
+
+QTreeView::item:selected:!active {
+    _background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);
+}
