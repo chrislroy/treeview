@@ -54,8 +54,9 @@ private:
 
 public:
     void initializeModel(const QList<ModelData> &data);
-    void fetchModel(QList<ModelData> &data);
+    bool fetchModel(const QString& group, QList<ModelData> &data);
 private:
+
     void addItemRow(
         const QString &first,
         const QString &second,

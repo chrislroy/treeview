@@ -75,6 +75,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializeModel(data);
 
+    QList<ModelData> test;
+    fetchModel("Quare", test);
+
     m_treeView = new MyTreeview(this);
 
     m_treeView->setItemDelegateForColumn(2, new MyDelegate());
@@ -112,13 +115,30 @@ void MainWindow::initializeModel(const QList<ModelData> &dataList)
     }
 }
 
-void MainWindow::fetchModel(QList<ModelData> &data)
+bool MainWindow::fetchModel(const QString& group, QList<ModelData> &data)
 {
     // clear data
     data = {};
-    // TODO - to be completed
 
+    auto groupItems = m_standardModel->findItems(group);
+    // group dones not exist
+    if (groupItems.count() == 0)
+        return false;
+    // that group has no children
+    if (!m_standardModel->hasChildren(groupItems[0]->index()))
+        return false;   
+
+    for (int row = 0; row < m_standardModel->rowCount(groupItems[0]->index()); row++) {
+        auto item1 = groupItems[0]->child(row, 0);
+        auto item2 = groupItems[0]->child(row, 1);
+
+        qDebug() << qPrintable(item1->index().data().toString()) << " " << qPrintable(item2->index().data().toString());
+        data << ModelData(RowType::ItemRow, item1->index().data().toString(), item2->index().data().toString());
+    }
+
+    return true;
 }
+
 
 void MainWindow::addItemRow(
     const QString &first,
